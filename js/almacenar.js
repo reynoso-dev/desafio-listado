@@ -1,51 +1,38 @@
-function cargarLista() {
-    const listaGuardada = localStorage.getItem('listaItems');
-    if (listaGuardada) {
-      const contenedor = document.getElementById('contenedor');
-      contenedor.innerHTML = listaGuardada;
+document.addEventListener("DOMContentLoaded", function () {
+    const itemInput = document.getElementById("item");
+    const addButton = document.getElementById("agregar");
+    const itemList = document.getElementById("contenedor");
+    const clearButton = document.getElementById("limpiar");
+  
+    // Se usa la funcion JSON.parse() para convertir texto en objeto JS
+    const savedItems = JSON.parse(localStorage.getItem("items")) || [];
+    savedItems.forEach(function (itemText) {
+      addItemToList(itemText);
+    });
+  
+    addButton.addEventListener("click", function () {
+      const newItemText = itemInput.value.trim();
+      if (newItemText !== "") {
+        addItemToList(newItemText);
+        itemInput.value = "";
+  
+        const savedItems = JSON.parse(localStorage.getItem("items")) || [];
+        savedItems.push(newItemText);
+        localStorage.setItem("items", JSON.stringify(savedItems));
+      }
+    });
+  
+    clearButton.addEventListener("click", function () {
+      itemList.innerHTML = "";
+      localStorage.removeItem("items");
+    });
+  
+    function addItemToList(text) {
+      const li = document.createElement("li");
+      li.className = "list-group-item";
+      li.textContent = text;
+      itemList.appendChild(li);
     }
-  }
-  
-  // Función para guardar la lista de ítems en el almacenamiento local
-  function guardarLista() {
-    const contenedor = document.getElementById('contenedor');
-    const listaItems = contenedor.innerHTML;
-    localStorage.setItem('listaItems', listaItems);
-  }
-  
-  // Función para agregar un nuevo ítem a la lista
-  function agregarItem() {
-    const itemInput = document.getElementById('item');
-    const nuevoItem = itemInput.value.trim(); 
-    
-    if (nuevoItem !== '') {
-      const contenedor = document.getElementById('contenedor');
-      const nuevoElemento = document.createElement('li');
-      nuevoElemento.classList.add('list-group-item');
-      nuevoElemento.textContent = nuevoItem;
-      contenedor.appendChild(nuevoElemento);
-  
-      guardarLista(); // Guardar la lista actualizada en el almacenamiento local
-      itemInput.value = ''; // Limpiar el campo de entrada
-    }
-  }
-
-// Función para limpiar la lista y el almacenamiento local
-  function limpiarLista() {
-    const contenedor = document.getElementById('contenedor');
-    contenedor.innerHTML = '';
-    localStorage.removeItem('listaItems');
-  }
-  
-  // Cargar la lista al cargar la página
-  window.addEventListener('DOMContentLoaded', () => {
-    cargarLista();
-         
-    const botonAgregar = document.getElementById('agregar');
-    botonAgregar.addEventListener('click', agregarItem);
-  
-    const botonLimpiar = document.getElementById('limpiar');
-    botonLimpiar.addEventListener('click', limpiarLista);
   });
 
 
