@@ -1,51 +1,44 @@
-function cargarLista() {
-    const listaGuardada = localStorage.getItem('listaItems');
-    if (listaGuardada) {
-      const contenedor = document.getElementById('contenedor');
-      contenedor.innerHTML = listaGuardada;
-    }
-  }
-  
-  // Función para guardar la lista de ítems en el almacenamiento local
-  function guardarLista() {
-    const contenedor = document.getElementById('contenedor');
-    const listaItems = contenedor.innerHTML;
-    localStorage.setItem('listaItems', listaItems);
-  }
-  
-  // Función para agregar un nuevo ítem a la lista
-  function agregarItem() {
-    const itemInput = document.getElementById('item');
-    const nuevoItem = itemInput.value.trim(); 
-    
-    if (nuevoItem !== '') {
-      const contenedor = document.getElementById('contenedor');
-      const nuevoElemento = document.createElement('li');
-      nuevoElemento.classList.add('list-group-item');
-      nuevoElemento.textContent = nuevoItem;
-      contenedor.appendChild(nuevoElemento);
-  
-      guardarLista(); // Guardar la lista actualizada en el almacenamiento local
-      itemInput.value = ''; // Limpiar el campo de entrada
-    }
-  }
+const itemInput = document.getElementById("item");
+const agregar = document.getElementById("agregar");
+const contenedor = document.getElementById("contenedor");
+const limpiar = document.getElementById("limpiar");
+//obtener elementos del DOM
 
-// Función para limpiar la lista y el almacenamiento local
+let items = JSON.parse(localStorage.getItem("items")) || [];
+//prueba cargar lista de items almacenada localmente
+
+function addItem() {
+    const newItem = itemInput.value.trim();
+    if (newItem !== "") {
+      items.push(newItem);
+      localStorage.setItem("items", JSON.stringify(items));
+      itemInput.value = "";
+      verLista();
+    }
+  }
+//agregar nuevo item a la lista
+
+function verLista() {
+    contenedor.innerHTML = "";
+    items.forEach(item => {
+      const lista = document.createElement("lista");
+      lista.textContent = item;
+      contenedor.appendChild(lista);
+    });
+  }
+//visualizar lista de items
+
   function limpiarLista() {
-    const contenedor = document.getElementById('contenedor');
-    contenedor.innerHTML = '';
-    localStorage.removeItem('listaItems');
+    items = [];
+    localStorage.removeItem("items");
+    verLista();
   }
-  
-  // Cargar la lista al cargar la página
-  window.addEventListener('DOMContentLoaded', () => {
-    cargarLista();
-         
-    const botonAgregar = document.getElementById('agregar');
-    botonAgregar.addEventListener('click', agregarItem);
-  
-    const botonLimpiar = document.getElementById('limpiar');
-    botonLimpiar.addEventListener('click', limpiarLista);
-  });
+//limpiar lista
 
+agregar.addEventListener("click", addItem);
+limpiar.addEventListener("click", limpiarLista);
+//manejador de evento para el boton agregar y limpiar
+
+verLista();
+//visualizar la lista al cargar la página
 
