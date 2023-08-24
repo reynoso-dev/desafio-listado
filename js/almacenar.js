@@ -29,3 +29,23 @@ function cargarLista() {
       itemInput.value = ''; // Limpiar el campo de entrada
     }
   }
+
+// Función para limpiar la lista y el almacenamiento local
+  function limpiarLista() {
+    const contenedor = document.getElementById('contenedor');
+    contenedor.innerHTML = '';
+    localStorage.removeItem('listaItems');
+  }
+  
+  // Cargar la lista al cargar la página
+  window.addEventListener('DOMContentLoaded', () => {
+    cargarLista();
+         
+    const botonAgregar = document.getElementById('agregar');
+    botonAgregar.addEventListener('click', agregarItem);
+  
+    const botonLimpiar = document.getElementById('limpiar');
+    botonLimpiar.addEventListener('click', limpiarLista);
+  });
+
+
